@@ -18,6 +18,8 @@ def createTypeDict(corpusPath):
                         line = line.replace("!", "")
                         line = line.replace(";", "")
                         line = line.replace("\"", "")
+                        line = line.replace("‘", "")
+                        line = line.replace("’", "")
 
                         # split sentence into words and add words to dictionary
                         data = line.split()

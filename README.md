@@ -2,7 +2,7 @@
 
 # Description
 
-This repository contains a various scripts used to pre-process data, and run a forced alignment pipeline using the [Montreal Forced Aligner](https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner/).
+This repository contains various scripts used to pre-process data, and run a forced alignment pipeline using the [Montreal Forced Aligner](https://github.com/MontrealCorpusTools/Montreal-Forced-Aligner/) for a Greek Alignment project.
 
 # File Description and Overview
 - align.py

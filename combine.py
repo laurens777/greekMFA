@@ -1,4 +1,5 @@
 import os, codecs, re
+from os.path import exists
 
 def combineTiers(mfaFile, original, outFile):
     # first loop through the mfa aligned file will write the phone tier
@@ -61,13 +62,19 @@ def combineTiers(mfaFile, original, outFile):
                 output.write(line)
 
 def main(aligned, original):
-    if not os.path.exists("./output/"):
-        os.makedirs("./output/")
+    if not os.path.exists("../temp/"):
+        os.makedirs("../temp/")
 
     for file in os.listdir(aligned):
         fileName = os.fsdecode(file)
         if fileName.endswith(".TextGrid"):
-            combineTiers(aligned+fileName, original+fileName, "./output/"+fileName)
+            if exists(original+fileName):
+                combineTiers(aligned+fileName, original+fileName, "../temp/"+fileName)
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description='Runs the aligment pipeline.')
+    parser.add_argument('alignedPath', type=str, help='the path to the aligned corpus folder')
+    parser.add_argument('originalPath', type=str, help='the path to the original corpus folder')
+    args = parser.parse_args()
+    main(args.alignedPath, args.originalPath)

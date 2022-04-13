@@ -18,6 +18,10 @@ This script will combine the original TextGrid file with the MFA aligned TextGri
 
 This script will create a TextGrid file containing one tier for use with the Montreal Forced Aligner.
 
+- posTag.py
+
+This script uses the Spacy library to do part of speech tagging on the sentence tier and align the morphological tags with the word tier.
+
 - punctFix.py
 
 This file contains various data-cleaning commands. This file can be edited to further clean TextGrid files.

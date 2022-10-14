@@ -19,8 +19,10 @@ def tag(folder, fileName):
     rules = readPhonRules("./phonRules.txt")
 
     grid = textgrids.TextGrid("./temp.TextGrid")
+
     word_list = []
-    for inter in grid["Word"]:
+    print(grid.keys())
+    for inter in grid["words"]:
         if str(inter.text) == "":
             continue
         word_list.append(inter)
@@ -53,7 +55,7 @@ def tag(folder, fileName):
 
     for t in grid:
         new_textgrid[t] = grid[t]
-        if t == "Word":
+        if t == "words":
             new_tier = copy.deepcopy(grid[t])
             for inter in new_tier:
                 inter.text = ''
@@ -185,4 +187,4 @@ def main(aligned):
                 tag(aligned, fileName)
 
 if __name__ == "__main__":
-    main("../temp/")
+    main("./temp/")

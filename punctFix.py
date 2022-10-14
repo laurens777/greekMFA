@@ -30,6 +30,7 @@ def addSpace(inPath, outPath):
                     line = line.replace("!", "! ")
                     line = line.replace("!  ", "! ")
                     line = line.replace(" !", "!")
+                    line = line.replace("xxx", "")
                 outFile.write(line)
 
 def rename(src, dst):

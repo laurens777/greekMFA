@@ -1,5 +1,37 @@
 import os, codecs, re
 from os.path import exists
+import textgrids
+import copy
+
+def new_combineTiers(mfaFile, original, outfile):
+    mfaGrid = textgrids.TextGrid(mfaFile)
+    originalGrid = textgrids.TextGrid(original)
+    outGrid = textgrids.TextGrid()
+
+    outGrid.xmin = mfaGrid.xmin
+    outGrid.xmax = mfaGrid.xmax
+    outGrid["phones"] = copy.deepcopy(mfaGrid["phones"])
+    outGrid["words"] = copy.deepcopy(mfaGrid["words"])
+
+    i = 2
+    for key in originalGrid.keys():
+        if key not in outGrid.keys():
+            outGrid[key] = copy.deepcopy(originalGrid[key])
+            i += 1
+
+    outGrid.write("temp.TextGrid")
+
+    j = 1
+    with codecs.open("temp.TextGrid", mode='r', encoding='utf-8') as inFile:
+        with codecs.open(outfile, mode='w', encoding='utf-8') as output:
+            for line in inFile:
+                if re.match("size = [0-9]+", line):
+                    line = "size = " + str(i) + "\n"
+                elif re.match("item [0-9]:", line):
+                    line = "\tsize [%d]:" % j
+                    line = line + "\n"
+                    j += 1
+                output.write(line)
 
 def combineTiers(mfaFile, original, outFile):
     # first loop through the mfa aligned file will write the phone tier
@@ -62,14 +94,19 @@ def combineTiers(mfaFile, original, outFile):
                 output.write(line)
 
 def main(aligned, original):
-    if not os.path.exists("../temp/"):
-        os.makedirs("../temp/")
+    if not os.path.exists("./temp/"):
+        os.makedirs("./temp/")
 
     for file in os.listdir(aligned):
         fileName = os.fsdecode(file)
         if fileName.endswith(".TextGrid"):
             if exists(original+fileName):
-                combineTiers(aligned+fileName, original+fileName, "../temp/"+fileName)
+                try:
+                    new_combineTiers(aligned+fileName, original+fileName, "./temp/"+fileName)
+                except:
+                    with open("log.txt", "w") as ferr:
+                        err_output = "Could not combine" + str(fileName)
+                        ferr.write(err_output)
 
 if __name__ == "__main__":
     import argparse

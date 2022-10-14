@@ -30,6 +30,10 @@ This file contains various data-cleaning commands. This file can be edited to fu
 
 This is a Praat script written by E. Chodroff that will re-sample .wav files to 16kHz and extract a single channel as required for the Montreal Forced Aligner.
 
-- greek_test_model.zip
+- greek_acoustic_model.zip
 
 This is the model that the Montreal Forced Aligner will use to align the transcripts to the audio files. This model was trained using the [Greek Internet Corpus](https://en.wiktionary.org/wiki/Appendix:Greek_word_lists) which contains ~72,000 tokens. 
+
+- phonDict.txt
+
+This is the dictionary with orthographic to phoneme mappings.

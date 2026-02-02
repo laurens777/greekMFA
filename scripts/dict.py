@@ -54,6 +54,7 @@ def graphToPhon(phonDict, phonRules):
             i += 1
 
         temp = ''.join([ch + ' ' for ch in temp])[:-1]
+        temp = temp.replace("*", "i/j")
 
         phonDict[word] = temp
 

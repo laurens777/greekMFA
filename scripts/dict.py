@@ -1,5 +1,6 @@
 import codecs
 import os
+import string
 
 def createTypeDict(path):
     phonDict = {}
@@ -31,8 +32,11 @@ def createTypeDict(path):
                 # split sentence into words and add words to dictionary
                 data = line.split()
                 for word in data:
-                    if word not in phonDict:
-                        phonDict[word] = ""
+                    # ensure that words are not composed of only numbers, punctuation or ascii letters.
+                    if all(char in string.digits + string.punctuation + string.ascii_letters for char in word):
+                        continue
+                    if word.lower() not in phonDict:
+                        phonDict[word.lower()] = ""
 
     #print(type(phonDict))
     return phonDict

@@ -1,32 +1,40 @@
-import os, codecs
+import codecs
+import os
 
-def createTypeDict(corpusPath):
+def createTypeDict(path):
     phonDict = {}
+    files = []
 
-    directory = os.fsencode(corpusPath)
+    if os.path.isfile(path):
+        files = [path]
+    elif os.path.isdir(path):
+        if not path[-1] == "/":
+            path = path + "/"
 
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".TextGrid"):
-            with codecs.open(corpusPath+filename, mode='r', encoding='UTF-16') as inFile:
-                for line in inFile:
-                    if "text" in line:
-                        # remove puctuation
-                        line = line.replace(",", "")
-                        line = line.replace(".", "")
-                        line = line.replace("?", "")
-                        line = line.replace("!", "")
-                        line = line.replace(";", "")
-                        line = line.replace("\"", "")
-                        line = line.replace("‘", "")
-                        line = line.replace("’", "")
+        [path+file for file in os.listdir(os.fsdecode(corpusPath))]
+    else:
+        return 0
 
-                        # split sentence into words and add words to dictionary
-                        data = line.split()
-                        for word in data:
-                            if word not in phonDict:
-                                phonDict[word] = ""
-    print(type(phonDict))
+    for filePath in files:
+        with codecs.open(filePath, mode='r', encoding='UTF-8') as inFile:
+            for line in inFile:
+                # remove puctuation
+                line = line.replace(",", "")
+                line = line.replace(".", "")
+                line = line.replace("?", "")
+                line = line.replace("!", "")
+                line = line.replace(";", "")
+                line = line.replace("\"", "")
+                line = line.replace("‘", "")
+                line = line.replace("’", "")
+
+                # split sentence into words and add words to dictionary
+                data = line.split()
+                for word in data:
+                    if word not in phonDict:
+                        phonDict[word] = ""
+
+    #print(type(phonDict))
     return phonDict
 
 def graphToPhon(phonDict, phonRules):
@@ -38,9 +46,13 @@ def graphToPhon(phonDict, phonRules):
                 if i <= 37:
                     temp = temp.replace(rule.split()[0], rule.split()[1].strip("\n").strip())
                 else:
-                    temp = temp.replace(rule.split()[0], rule.split()[1].strip("\n").strip()+" ")
+                    temp = temp.replace(rule.split()[0], rule.split()[1].strip("\n").strip())
             i += 1
+
+        temp = ''.join([ch + ' ' for ch in temp])[:-1]
+
         phonDict[word] = temp
+
     return phonDict
 
 def readPhonRules(path):
@@ -56,13 +68,17 @@ def savePhonRules(dict):
         for line in d:
             outFile.write(line + " " + dict[line].replace("  ", " ") + "\n")
 
-def main():
-    d = createTypeDict("./input/")
+def main(path):
+    d = createTypeDict(path)
     print(type(d))
-    rules = readPhonRules("./pronuciationConverter.txt")
+    rules = readPhonRules("../data/phonRules.txt")
     d = graphToPhon(d, rules)
     savePhonRules(d)
-    
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Script for creating a phonDict from a single file or folder.")
+    parser.add_argument("inputPath", type=str, help="Pass in a path to either a single file or a folder.")
+    args = parser.parse_args()
+
+    main(args.inputPath)

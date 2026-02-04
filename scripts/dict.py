@@ -12,9 +12,9 @@ def createTypeDict(path):
         if not path[-1] == "/":
             path = path + "/"
 
-        [path+file for file in os.listdir(os.fsdecode(corpusPath))]
+        [path+file for file in os.listdir(os.fsdecode(path))]
     else:
-        return 0
+        raise ValueError(f"Invalid path: {path}")
 
     for filePath in files:
         with codecs.open(filePath, mode='r', encoding='UTF-8') as inFile:

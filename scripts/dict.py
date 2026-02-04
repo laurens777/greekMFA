@@ -42,16 +42,11 @@ def createTypeDict(path):
     return phonDict
 
 def graphToPhon(phonDict, phonRules):
-    i = 1
     for word in phonDict.keys():
         temp = word
         for rule in phonRules:
             if rule.split()[0] in temp:
-                if i <= 37:
-                    temp = temp.replace(rule.split()[0], rule.split()[1].strip("\n").strip())
-                else:
-                    temp = temp.replace(rule.split()[0], rule.split()[1].strip("\n").strip())
-            i += 1
+                temp = temp.replace(rule.split()[0], rule.split()[1].strip("\n").strip())
 
         temp = ''.join([ch + ' ' for ch in temp])[:-1]
         temp = temp.replace("*", "i/j")

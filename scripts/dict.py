@@ -62,8 +62,8 @@ def readPhonRules(path):
             rules.append(line)
     return rules
 
-def savePhonRules(dict):
-    d = sorted(dict)
+def savePhonRules(phonDict):
+    d = sorted(phonDict)
     with open("./phonDict.txt", 'w+') as outFile:
         for line in d:
             outFile.write(line + " " + dict[line].replace("  ", " ") + "\n")

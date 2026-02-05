@@ -32,11 +32,12 @@ def createTypeDict(path):
                 # split sentence into words and add words to dictionary
                 data = line.split()
                 for word in data:
-                    # ensure that words are not composed of only numbers, punctuation or ascii letters.
-                    if all(char in string.digits + string.punctuation + string.ascii_letters for char in word):
-                        continue
-                    if word.lower() not in phonDict:
-                        phonDict[word.lower()] = ""
+                    allowed = "άέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύΐ"
+
+                    # ensure that words are only composed of allowed Greek characters.
+                    if set(word.lower()).issubset(set(allowed)):
+                        if word.lower() not in phonDict:
+                            phonDict[word.lower()] = ""
 
     #print(type(phonDict))
     return phonDict
@@ -66,7 +67,7 @@ def savePhonRules(phonDict):
     d = sorted(phonDict)
     with open("./phonDict.txt", 'w+') as outFile:
         for line in d:
-            outFile.write(line + " " + dict[line].replace("  ", " ") + "\n")
+            outFile.write(line + " " + phonDict[line].replace("  ", " ") + "\n")
 
 def main(path):
     d = createTypeDict(path)

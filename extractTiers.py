@@ -1,4 +1,5 @@
 import os, codecs, re
+from textgrids import TextGrid
 
 def stripTiers(inPath, outPath, target):
     """ Removes all tiers from textgrid file except for the target tier.
@@ -12,32 +13,17 @@ def stripTiers(inPath, outPath, target):
     target : str
         label of the target tier
     """
-    tiers = {}
-    with codecs.open(inPath, mode='r', encoding='utf-16be') as inFile:
-        for line in inFile:
-            m = re.match(' *item \[([0-9]+)\]:', line) 
-            if m:
-                tiers[m.group(1)] = ""
-                tier = m.group(1)
-            n = re.match(' *name = "([a-zA-Z]+)"', line)
-            if n:
-                tiers[tier] = n.group(1).lower()
-    
-    with codecs.open(inPath, mode='r', encoding='utf-16be') as inFile:
-        with codecs.open(outPath, mode='w', encoding='utf-16be') as outFile:
-                delete = False
-                for line in inFile:
-                    if line.split(' ')[0] == "size":
-                        outFile.write("size = 1\n")
-                        continue
-                    m = re.match(' *item \[([0-9]+)\]:', line)
-                    if m:
-                        if tiers[m.group(1)] != target.lower():
-                            delete = True
-                        if tiers[m.group(1)] == target.lower():
-                            delete = False
-                    if delete == False:
-                        outFile.write(line)
+    tg = TextGrid(inPath)
+
+    tier = tg[target]
+
+    new_tg = TextGrid()
+    new_tg.xmin = tg.xmin
+    new_tg.xmax = tg.xmax
+    new_tg[target] = tier
+
+    with open(outPath, 'w', encoding="utf-8") as f:
+        f.write(new_tg.__str__())
 
 def main(corpusPath, outPath, targetTier):
     directory = os.fsencode(corpusPath)
@@ -49,14 +35,15 @@ def main(corpusPath, outPath, targetTier):
     for file in os.listdir(directory):
         fileName = os.fsdecode(file)
         if fileName.endswith(".TextGrid"):
+            print(fileName)
             stripTiers(corpusPath+fileName, outputPath+fileName, targetTier)
     
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.ArgumentParser(description='add space after punctuation.')
+    parser = argparse.ArgumentParser(description='This file contains the code for extracting a specific tier from a textgrid file by tier name.')
     parser.add_argument('corpusPath', type=str, help='the path to the corpus folder')
     parser.add_argument('outPath', type=str, help='the path to the output folder')
-    parser.add_argument('targetTier', type=str, help='the tier that the alignment is based on')
+    parser.add_argument('targetTier', type=str, help='the tier that is targeted for extraction')
     args = parser.parse_args()
     main(args.corpusPath, args.outPath, args.targetTier) 

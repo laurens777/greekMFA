@@ -1,8 +1,14 @@
-import codecs
 import os
-import string
 
 def createTypeDict(path):
+    """ Creates a dictionary of unique words from text files and adds a phonological
+        representation of the word, reating a pronunciation dictionary.
+
+    Parameters
+    ----------
+    inputPath : str
+        relative, to this script, or absolute path to the source directory or file to be processed.
+    """
     phonDict = {}
     files = []
 
@@ -17,27 +23,13 @@ def createTypeDict(path):
         raise ValueError(f"Invalid path: {path}")
 
     for filePath in files:
-        with codecs.open(filePath, mode='r', encoding='UTF-8') as inFile:
+        with open(filePath, mode='r', encoding='UTF-8') as inFile:
             for line in inFile:
-                # remove puctuation
-                line = line.replace(",", "")
-                line = line.replace(".", "")
-                line = line.replace("?", "")
-                line = line.replace("!", "")
-                line = line.replace(";", "")
-                line = line.replace("\"", "")
-                line = line.replace("‘", "")
-                line = line.replace("’", "")
-
                 # split sentence into words and add words to dictionary
                 data = line.split()
                 for word in data:
-                    allowed = "άέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύΐ"
-
-                    # ensure that words are only composed of allowed Greek characters.
-                    if set(word.lower()).issubset(set(allowed)):
-                        if word.lower() not in phonDict:
-                            phonDict[word.lower()] = ""
+                    if word.lower() not in phonDict:
+                        phonDict[word.lower()] = ""
 
     #print(type(phonDict))
     return phonDict

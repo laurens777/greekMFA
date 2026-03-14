@@ -2,12 +2,20 @@ import os
 import unicodedata
 
 def main(file_path):
+    """ Leipzig corpora are plaintext files containing three tab-separated columns.
+        This file extracts the token in the second column and saves them to a new file.
+
+    Parameters
+    ----------
+    file_path : str
+        relative, to this script, or absolute path to the file to be processed.
+    """
+    
     # Get the directory and base name
     dir_name = os.path.dirname(file_path)
     base_name = os.path.basename(file_path)
     name, ext = os.path.splitext(base_name)
 
-    # Create output file path in the same folder
     output_file = os.path.join(dir_name, name + "_clean" + ext)
 
     # Read the input file and extract words

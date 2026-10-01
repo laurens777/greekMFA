@@ -15,7 +15,10 @@ def stripTiers(inPath, outPath, target):
     """
     tg = TextGrid(inPath)
 
-    tier = tg[target]
+    try:
+        tier = tg[target]
+    except:
+        tier = tg[target.lower()]
 
     new_tg = TextGrid()
     new_tg.xmin = tg.xmin
@@ -33,6 +36,7 @@ def main(corpusPath, outPath, targetTier):
         os.makedirs(outputPath)
 
     for file in os.listdir(directory):
+        print(file)
         fileName = os.fsdecode(file)
         if fileName.endswith(".TextGrid"):
             print(fileName)

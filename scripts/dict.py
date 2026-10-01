@@ -2,7 +2,7 @@ import os
 
 def createTypeDict(path):
     """ Creates a dictionary of unique words from text files and adds a phonological
-        representation of the word, reating a pronunciation dictionary.
+        representation of the word, creating a pronunciation dictionary.
 
     Parameters
     ----------

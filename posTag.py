@@ -16,7 +16,7 @@ def tag(folder, fileName):
 
     nlp = spacy.load("el_core_news_lg")
 
-    rules = readPhonRules("./phonRules.txt")
+    rules = readPhonRules("./data/phonRules.txt")
 
     grid = textgrids.TextGrid("./temp.TextGrid")
 

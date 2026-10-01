@@ -35,9 +35,16 @@ def main(corpusPath, outPath, targetTier):
     for file in os.listdir(directory):
         fileName = os.fsdecode(file)
         if fileName.endswith(".TextGrid"):
-            print(fileName)
-            stripTiers(corpusPath+fileName, outputPath+fileName, targetTier)
-    
+            inPath = os.path.join(corpusPath, fileName)
+            outPath = os.path.join(outputPath, fileName)
+
+            print(f"Processing: {inPath}")
+
+            try:
+                stripTiers(inPath, outPath, targetTier)
+            except Exception as e:
+                print(f"ERROR in {fileName}: {type(e).__name__}: {e}")
+                raise
 
 if __name__ == '__main__':
     import argparse

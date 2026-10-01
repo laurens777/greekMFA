@@ -1,5 +1,5 @@
 import extractTiers, punctFix, combine, posTag
-import subprocess, os, time
+import subprocess, os, shutil, time
 from os.path import exists
 
 def main(corpusPath="../inputdata/", targetTier="word"):
@@ -9,6 +9,9 @@ def main(corpusPath="../inputdata/", targetTier="word"):
         corpusPath += "/"
     
     outputPath = "./processedData/"
+    for generatedPath in (outputPath, "./alignedData/", "./temp/"):
+        if os.path.exists(generatedPath):
+            shutil.rmtree(generatedPath)
     extractTiers.main(corpusPath, outputPath, targetTier)
 
     punctFix.main(outputPath)
@@ -23,11 +26,19 @@ def main(corpusPath="../inputdata/", targetTier="word"):
     
     subprocess.run(["praat", "--run", "./wavPreProcess"], stdout=subprocess.DEVNULL)
 
-    # subprocess.run(["mfa", "g2p", "./greek_test_model.zip", "./processedData/", "./phonDict.txt"])
+    # subprocess.run(["mfa", "g2p", "./greek_acoustic_model_25-09-2026.zip", "./processedData/", "./scripts/phonDict.txt"])
 
     startAlignTime = time.time()
 
-    subprocess.run(["mfa", "align", "--clean", "./processedData", "./phonDict.txt", "./greek_acoustic_model.zip", "./alignedData/"])
+    try:
+        subprocess.run(
+            ["mfa", "align", "--clean", "./processedData", "./scripts/phonDict.txt", "./greek_acoustic_model_25-09-2026.zip", "./alignedData/"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as error:
+        raise RuntimeError(
+            "MFA alignment failed. Check the MFA error above, then rerun the pipeline."
+        ) from error
 
     endAlignTime = time.time()
 

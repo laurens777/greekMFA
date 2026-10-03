@@ -2,7 +2,7 @@ import extractTiers, punctFix, combine, posTag
 import subprocess, os, shutil, time
 from os.path import exists
 
-def main(corpusPath="../inputdata/", targetTier="word"):
+def main(corpusPath="../inputdata/", targetTier="word", tiers=None):
     startTime = time.time()
 
     if not corpusPath[-1] == "/":
@@ -42,7 +42,7 @@ def main(corpusPath="../inputdata/", targetTier="word"):
 
     endAlignTime = time.time()
 
-    combine.main("./alignedData/", corpusPath)
+    combine.main("./alignedData/", corpusPath, tiers)
 
     posTag.main("./temp/")
 
@@ -57,5 +57,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Runs the aligment pipeline.')
     parser.add_argument('targetTier', type=str, help='the tier that the alignment is based on')
     parser.add_argument('folder', type=str, help='the folder containing the data')
+    parser.add_argument('--keep', nargs='+', default=None, help='original tiers to keep in the final TextGrid')
     args = parser.parse_args()
-    main(args.folder, args.targetTier) 
+    main(args.folder, args.targetTier, args.keep) 

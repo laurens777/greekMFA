@@ -7,7 +7,7 @@ def main(corpusPath="../inputdata/", targetTier="word"):
 
     if not corpusPath[-1] == "/":
         corpusPath += "/"
-    
+
     outputPath = "./processedData/"
     for generatedPath in (outputPath, "./alignedData/", "./temp/"):
         if os.path.exists(generatedPath):
@@ -23,7 +23,7 @@ def main(corpusPath="../inputdata/", targetTier="word"):
             subprocess.run(["ffmpeg", "-i", corpusPath+fileName, target], stdout=subprocess.DEVNULL)
         elif fileName.endswith(".wav"):
             subprocess.run(["cp", corpusPath+fileName, outputPath+fileName])
-    
+
     subprocess.run(["praat", "--run", "./wavPreProcess"], stdout=subprocess.DEVNULL)
 
     # subprocess.run(["mfa", "g2p", "./greek_acoustic_model_25-09-2026.zip", "./processedData/", "./scripts/phonDict.txt"])
@@ -32,7 +32,7 @@ def main(corpusPath="../inputdata/", targetTier="word"):
 
     try:
         subprocess.run(
-            ["mfa", "align", "--clean", "./processedData", "./scripts/phonDict.txt", "./greek_acoustic_model_25-09-2026.zip", "./alignedData/"],
+            ["mfa", "align", "--clean", "./processedData", "./phonDict.txt", "./greekModelNew_02-10-2026.zip", "./alignedData/"],
             check=True,
         )
     except subprocess.CalledProcessError as error:

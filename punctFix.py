@@ -14,8 +14,8 @@ def addSpace(inPath, outPath):
         relative, to this script, or absolute path to the output TextGrid file
     """
 
-    with codecs.open(inPath, mode='r', encoding='utf-16be') as inFile:
-        with codecs.open(outPath, mode='w', encoding='utf-16be') as outFile:
+    with codecs.open(inPath, mode='r', encoding='utf-8') as inFile:
+        with codecs.open(outPath, mode='w', encoding='utf-8') as outFile:
             for line in inFile:
                 if "text" in line:
                     line = line.replace(",", ", ")

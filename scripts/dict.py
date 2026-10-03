@@ -9,6 +9,10 @@ def createTypeDict(path):
     inputPath : str
         relative, to this script, or absolute path to the source directory or file to be processed.
     """
+
+    # Characters that should cause a word to be ignored
+    BAD_CHARS = set("ἀἄἁἅἓἔἑἕἐὰᾶᾳὲἠἤἦἡἥῄὴῆῇἰἶἱἵὶῖῒῑὀὄὂὁὅὃὸῥὐὔὑὕὺῦὠὤὦὡὥὧὼῶῷῳϰ")
+
     phonDict = {}
     files = []
 
@@ -28,8 +32,14 @@ def createTypeDict(path):
                 # split sentence into words and add words to dictionary
                 data = line.split()
                 for word in data:
-                    if word.lower() not in phonDict:
-                        phonDict[word.lower()] = ""
+                    word = word.lower()
+
+                    # Skip words containing problematic Greek characters
+                    if any(char in BAD_CHARS for char in word):
+                        continue
+
+                    if word not in phonDict:
+                        phonDict[word] = ""
 
     #print(type(phonDict))
     return phonDict
